@@ -1,0 +1,32 @@
+services:
+  gescon_jcj:
+    build: .
+    container_name: gescon_jcj
+    depends_on:
+      mysql_jcj:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_jcj:3306/concesionario_jcj?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+
+  mysql_jcj:
+    image: mysql:8.4
+    container_name: concesionario_jcj
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: concesionario_jcj
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - mysql_jcj_data:/var/lib/mysql
+
+volumes:
+  mysql_jcj_data:

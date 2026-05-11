@@ -87,6 +87,6 @@ jobs:
             cd /usr/app_aaee_jcj
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/gescon_jcj:latest
-            docker compose down
-            docker compose up -d
-            docker compose ps
+            docker-compose down
+            docker-compose up -d
+            docker-compose ps

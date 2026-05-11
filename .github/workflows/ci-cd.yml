@@ -11,6 +11,9 @@ jobs:
   build-and-test:
     name: Build y Tests Unitarios
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gescon
 
     steps:
       - name: 📥 Checkout del código
@@ -23,6 +26,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: 🔑 Dar permisos a mvnw
+        run: chmod +x mvnw
+
       - name: 🔨 Build con Maven (sin tests)
         run: ./mvnw clean package -DskipTests
 
@@ -34,7 +40,7 @@ jobs:
         if: always()
         with:
           name: surefire-reports
-          path: target/surefire-reports/
+          path: gescon/target/surefire-reports/
 
   docker-build-push:
     name: Build y Push imagen Docker
@@ -55,7 +61,7 @@ jobs:
       - name: 🏗️ Build y Push imagen
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: gescon
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/gescon_jcj:latest
